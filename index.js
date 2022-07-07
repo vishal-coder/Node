@@ -5,4 +5,12 @@ app.get("/", (req, res) => {
   res.send("Hello World");
 });
 
-app.listen(3000);
+const { movieData } = require("./movies");
+app.get("/movies", (req, res) => {
+  console.log("request made", req);
+  res.send(movieData);
+});
+
+app.listen(3000, () => {
+  console.log("Listening to requests....");
+});
