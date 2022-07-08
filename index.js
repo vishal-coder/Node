@@ -8,8 +8,11 @@ import fs from "fs";
 // const express = require("express");
 const app = express();
 
+//app.use -> Intercepts request  and applies express.json()
+app.use(express.json());
 // const MONGO_URL = "mongodb://localhost";
-const MONGO_URL = "mongodb://127.0.0.1"; //  nodejs - 16+
+// const MONGO_URL = "mongodb://127.0.0.1"; //  nodejs - 16+
+const MONGO_URL = "mongodb+srv://<username>:<pass>@cluster0.wirzb.mongodb.net";
 
 async function createConnection() {
   const client = new MongoClient(MONGO_URL);
@@ -29,9 +32,11 @@ app.get("/", (req, res) => {
 //express converting js object to JSON and sending over HTTP
 // import movieData from "./movies";
 
-app.get("/movies", (req, res) => {
+app.get("/movies", async function (req, res) {
   console.log("request made");
-  res.send(movieData);
+  //cursor - pagination | cursor -> array | toArray()
+  const movies = await client.db("zen").collection("movies").find({}).toArray();
+  res.send(movies);
 });
 
 app.get("/movies/:id", async (req, res) => {
@@ -42,6 +47,14 @@ app.get("/movies/:id", async (req, res) => {
 
   // movie = movieData.find((mv) => mv.id === id);
   movie ? res.send(movie) : res.status(404).send({ msg: "Movie Not Found" });
+});
+
+//middleware(inbuid) - express.json();
+app.post("/movies", express.json(), async function (req, res) {
+  const data = req.body;
+  console.log("data", data);
+  const result = await client.db("zen").collection("movies").insertMany(data);
+  res.send(result);
 });
 
 app.get("/404", (req, res) => {

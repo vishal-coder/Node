@@ -1,4 +1,4 @@
-const fs = require("fs");
+import fs from "fs";
 const quote = "live more, worry less :) :)";
 const [, , num] = process.argv;
 console.log(num);
