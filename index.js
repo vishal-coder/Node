@@ -18,6 +18,7 @@ app.use(express.json());
 // const MONGO_URL = "mongodb://localhost";
 // const MONGO_URL = "mongodb://127.0.0.1"; //  nodejs - 16+
 const MONGO_URL = process.env.MONGO_URL;
+//const MONGO_URL = "mongodb+srv://sa:Ewg7pvR6NkbgPjM@cluster0.wirzb.mongodb.net";
 
 async function createConnection() {
   const client = new MongoClient(MONGO_URL);
@@ -37,10 +38,20 @@ app.get("/", (req, res) => {
 //express converting js object to JSON and sending over HTTP
 // import movieData from "./movies";
 
-app.get("/movies", async function (req, res) {
+app.get("/movies", async function (request, res) {
   console.log("request made");
+
+  console.log(request.query);
+  if (request.query.rating) {
+    request.query.rating = +request.query.rating;
+  }
+
   //cursor - pagination | cursor -> array | toArray()
-  const movies = await client.db("zen").collection("movies").find({}).toArray();
+  const movies = await client
+    .db("zen")
+    .collection("movies")
+    .find(request.query)
+    .toArray();
   res.send(movies);
 });
 
@@ -60,6 +71,40 @@ app.post("/movies", express.json(), async function (req, res) {
   console.log("data", data);
   const result = await client.db("zen").collection("movies").insertMany(data);
   res.send(result);
+});
+
+app.delete("/movies/:id", async (req, res) => {
+  console.log("request made", req.params);
+  const { id } = req.params;
+
+  const result = await client
+    .db("zen")
+    .collection("movies")
+    .deleteOne({ id: id });
+
+  // movie = movieData.find((mv) => mv.id === id);
+  result.deletedCount > 0
+    ? res.send(result)
+    : res.status(404).send({ msg: "NOT DELETED. Movie Not Found." });
+});
+
+app.put("/movies/:id", async (req, res) => {
+  console.log("request made", req.params);
+  console.log("request body", req.body);
+  const { id } = req.params;
+  var myquery = { id: id };
+  var data = { $set: req.body };
+
+  const result = await client
+    .db("zen")
+    .collection("movies")
+    .updateOne(myquery, data);
+
+  // movie = movieData.find((mv) => mv.id === id);
+  console.log("update result", result);
+  result
+    ? res.send(result)
+    : res.status(404).send({ msg: "NOT DELETED. Movie Not Found." });
 });
 
 app.get("/404", (req, res) => {
