@@ -3,16 +3,21 @@
 // const { response } = require("express");
 import { MongoClient } from "mongodb";
 import express from "express";
+
+import dotenv from "dotenv";
+dotenv.config();
 import fs from "fs";
 //const fs1 = require("fs");
 // const express = require("express");
 const app = express();
 
 //app.use -> Intercepts request  and applies express.json()
+//express.json() is a built in middleware function in Express
+//It parses incoming JSON requests and puts the parsed data in req.body
 app.use(express.json());
 // const MONGO_URL = "mongodb://localhost";
 // const MONGO_URL = "mongodb://127.0.0.1"; //  nodejs - 16+
-const MONGO_URL = "mongodb+srv://<username>:<pass>@cluster0.wirzb.mongodb.net";
+const MONGO_URL = process.env.MONGO_URL;
 
 async function createConnection() {
   const client = new MongoClient(MONGO_URL);
