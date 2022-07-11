@@ -112,6 +112,6 @@ app.get("/404", (req, res) => {
   console.log(" this is 404 ");
 });
 
-app.listen(3000, () => {
+app.listen(process.env.PORT, () => {
   console.log("Listening to requests....");
 });
