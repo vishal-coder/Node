@@ -1,4 +1,5 @@
 import express from "express";
+import { ObjectId } from "mongodb";
 import {
   getAllMovies,
   getMovieById,
@@ -23,7 +24,7 @@ router.get("/", async function (request, res) {
 });
 
 router.get("/:id", async (req, res) => {
-  console.log("request made", req.params);
+  console.log("request made get by id", req.params);
   const { id } = req.params;
 
   const movie = await getMovieById(id);
@@ -53,10 +54,12 @@ router.delete("/:id", async (req, res) => {
 });
 
 router.put("/:id", async (req, res) => {
-  console.log("request made", req.params);
+  console.log("request made put method", req.params);
+  console.log("request body request is -", req);
   console.log("request body", req.body);
+  console.log("request req.params", req.params);
   const { id } = req.params;
-  var myquery = { id: id };
+  var myquery = { _id: ObjectId(id) };
   var data = { $set: req.body };
 
   const result = await updateMovieById(myquery, data);
