@@ -33,6 +33,6 @@ export async function getAllMovies(request) {
     .toArray();
 }
 
-export function createUser(data) {
+export function createUser1(data) {
   return client.db("zen").collection("uers").insertOne(data);
 }

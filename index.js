@@ -9,6 +9,7 @@ dotenv.config();
 import fs from "fs";
 import { moviesRouter } from "./movies.js";
 import { addSingleMovieRouter } from "./addSingleMovie.js";
+import { usersRouter } from "./users.js";
 
 //const fs1 = require("fs");
 // const express = require("express");
@@ -41,6 +42,7 @@ app.get("/", (req, res) => {
 
 app.use("/addSingleMovie", addSingleMovieRouter);
 app.use("/movies", moviesRouter);
+app.use("/users", usersRouter);
 //API Movies
 //express converting js object to JSON and sending over HTTP
 // import movieData from "./movies";
