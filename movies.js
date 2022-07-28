@@ -11,7 +11,7 @@ import {
 
 const router = express.Router();
 
-router.get("/", auth, async function (request, res) {
+router.get("/",  async function (request, res) {
   console.log("request made");
 
   console.log(request.query);
