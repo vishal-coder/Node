@@ -36,7 +36,7 @@ export const client = await createConnection();
 
 app.get("/", (req, res) => {
   console.log("request made", req);
-  res.send("Hello World");
+  res.send("Default request made");
 });
 
 app.use("/addSingleMovie", addSingleMovieRouter);
