@@ -6,7 +6,7 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 dotenv.config();
-import fs from "fs";
+
 import { moviesRouter } from "./movies.js";
 import { addSingleMovieRouter } from "./addSingleMovie.js";
 import { usersRouter } from "./users.js";
@@ -20,11 +20,10 @@ const app = express();
 //It parses incoming JSON requests and puts the parsed data in req.body
 app.use(express.json()); // <==== parse request body as JSON
 
-app.use(cors());
+// app.use(cors());
 // const MONGO_URL = "mongodb://localhost";
 // const MONGO_URL = "mongodb://127.0.0.1"; //  nodejs - 16+
 const MONGO_URL = process.env.MONGO_URL;
-//const MONGO_URL = "mongodb+srv://sa:Ewg7pvR6NkbgPjM@cluster0.wirzb.mongodb.net";
 
 async function createConnection() {
   const client = new MongoClient(MONGO_URL);
@@ -48,5 +47,5 @@ app.use("/users", usersRouter);
 // import movieData from "./movies";
 
 app.listen(process.env.PORT, () => {
-  console.log("Listening to requests....");
+  console.log("Listening to requests....", process.env.PORT);
 });
